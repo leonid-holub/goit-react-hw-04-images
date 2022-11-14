@@ -1,42 +1,31 @@
-import React from 'react';
+import { useState } from 'react';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
 
-class App extends React.Component {
-  state = {
-    q: '',
-    page: 1,
+export default function App() {
+  const [q, setQ] = useState('');
+  const [page, setPage] = useState(1);
+
+  const handleSearchSubmit = query => {
+    setQ(query);
+    setPage(1);
   };
 
-  handleSearchSubmit = query => {
-    this.setState({
-      q: query,
-      page: 1,
-    });
-  };
-
-  handleIncrementPage = e => {
+  const handleIncrementPage = e => {
     e.preventDefault();
-    this.setState(({ page }) => ({
-      page: page + 1,
-    }));
+    setPage(prevState => prevState + 1);
   };
 
-  render() {
-    const { q, page } = this.state;
-    return (
-      <>
-        <Searchbar onSubmit={this.handleSearchSubmit} />
-        {q && (
-          <ImageGallery
-            query={q}
-            page={page}
-            onChangePage={this.handleIncrementPage}
-          />
-        )}
-      </>
-    );
-  }
+  return (
+    <>
+      <Searchbar onSubmit={handleSearchSubmit} />
+      {q && (
+        <ImageGallery
+          query={q}
+          page={page}
+          onChangePage={handleIncrementPage}
+        />
+      )}
+    </>
+  );
 }
-
-export default App;

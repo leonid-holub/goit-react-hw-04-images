@@ -1,47 +1,37 @@
-import React from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'components/Modal/Modal';
 import css from './ImageGalleryItem.module.css';
 
-class ImageGalleryItem extends React.Component {
-  state = {
-    showModal: false,
+export default function ImageGalleryItem({ galleryImg, imgAlt, modalImg }) {
+  const [showModal, setShowModal] = useState(false);
+
+  const toggleModal = () => {
+    setShowModal(!showModal);
   };
 
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-    }));
-  };
-
-  handleToggleModal = e => {
+  const handleToggleModal = e => {
     if (e.currentTarget === e.target) {
-      this.toggleModal();
+      toggleModal();
     }
   };
 
-  render() {
-    const { galleryImg, imgAlt, modalImg } = this.props;
-
-    return (
-      <li className={css.ImageGalleryItem}>
-        <img
-          className={css['ImageGalleryItem-image']}
-          src={galleryImg}
-          alt={imgAlt}
-          onClick={this.handleToggleModal}
-        />
-        {this.state.showModal && (
-          <Modal onClick={this.handleToggleModal} onPressBtn={this.toggleModal}>
-            <img src={modalImg} alt={imgAlt}></img>
-          </Modal>
-        )}
-      </li>
-    );
-  }
+  return (
+    <li className={css.ImageGalleryItem}>
+      <img
+        className={css['ImageGalleryItem-image']}
+        src={galleryImg}
+        alt={imgAlt}
+        onClick={handleToggleModal}
+      />
+      {showModal && (
+        <Modal onClick={handleToggleModal} onPressBtn={toggleModal}>
+          <img src={modalImg} alt={imgAlt}></img>
+        </Modal>
+      )}
+    </li>
+  );
 }
-
-export default ImageGalleryItem;
 
 ImageGalleryItem.propTypes = {
   galleryImg: PropTypes.string.isRequired,
